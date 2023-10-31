@@ -1,11 +1,12 @@
 import 'dart:io';
+import 'package:path/path.dart' as p;
 
 enum LogType { info, warning, error, debug }
 
 class DartLog {
   String convertTime(DateTime now) =>
       '${now.year}-${now.month > 9 ? now.month : '0${now.month}'}-${now.day > 9 ? now.day : '0${now.day}'} ${now.hour > 9 ? now.hour : '0${now.hour}'}:${now.minute > 9 ? now.minute : '0${now.minute}'}:${now.second > 9 ? now.second : '0${now.second}'}';
-  final String _rootPath =
+  final String rootPath =
       '${Platform.resolvedExecutable.substring(0, Platform.resolvedExecutable.lastIndexOf(Platform.pathSeparator) + 1)}${Platform.pathSeparator}';
 
   /// Function for logging,
@@ -16,15 +17,14 @@ class DartLog {
           .split(Platform.pathSeparator)
           .last
           .replaceAll('.exe', '');
-      print('path: $_rootPath\nappName: $appName');
+      // print('path: $_rootPath\nappName: $appName');
       String logText =
           '[${convertTime(DateTime.now())}] ${type.name.toUpperCase()} - ${info.toString().replaceAll('\n', ' ')}\n';
-      final directory = Directory('${_rootPath}logs');
+      final directory = Directory(p.join(rootPath, 'logs'));
       if (!directory.existsSync()) {
         directory.createSync();
       }
-      final file =
-          File('${directory.path}${Platform.pathSeparator}$appName.log');
+      final file = File(p.join(directory.path, '$appName.log'));
       if (file.existsSync()) {
         file.writeAsStringSync(logText, mode: FileMode.append);
       } else {
