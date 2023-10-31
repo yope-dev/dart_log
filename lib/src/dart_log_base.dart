@@ -17,7 +17,6 @@ class DartLog {
           .split(Platform.pathSeparator)
           .last
           .replaceAll('.exe', '');
-      // print('path: $_rootPath\nappName: $appName');
       String logText =
           '[${convertTime(DateTime.now())}] ${type.name.toUpperCase()} - ${info.toString().replaceAll('\n', ' ')}\n';
       final directory = Directory(p.join(rootPath, 'logs'));
